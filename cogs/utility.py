@@ -112,9 +112,24 @@ class Utility(commands.Cog):
         print("Sending embed...")
         await interaction.response.send_message(embed=embed)
 
-    @app_commands.command(name="avatar", description="displays the avatar of a member")
-    @app_commands.describe(member="the member to display the avatar for")
-    async def avatar(self, interaction: Interaction, member: Optional[discord.Member]=None):
+    @app_commands.command(name="avatar", description="displays the avatar of a member or guild")
+    @app_commands.describe(member="the member to display the avatar for", guild_id="the guild id to display the avatar for")
+    async def avatar(self, interaction: Interaction, member: Optional[discord.Member]=None, guild_id: Optional[str]=None):
+        if guild_id:
+            try:
+                guild = self.client.get_guild(int(guild_id))
+                if guild is None:
+                    embed = Embed(description=f"> Could not find guild with id {guild_id}", color=0x0C0C0D)
+                    await interaction.response.send_message(embed=embed)
+                else:
+                    embed=Embed(color=0x0C0C0D)
+                    embed.set_image(url=guild.icon)
+                    embed.set_author(name=f"{guild.name}", icon_url=guild.icon)
+                    await interaction.response.send_message(embed=embed)
+            except ValueError:
+                embed = Embed(description=f"> {guild_id} is not a valid guild id", color=0x0C0C0D)
+                await interaction.response.send_message(embed=embed)
+
         if not member:
             member = interaction.user
 
