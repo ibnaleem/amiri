@@ -85,6 +85,10 @@ class Utility(commands.Cog):
         ic(permission)
         permission = " | ".join(permission)
         nickname = member.nick if member.nick else member.display_name
+        ic(nickname)
+        banner = member.banner if member.banner else None
+        ic(banner)
+
 
         embed = Embed(description=f"> *{status}*", color=member.colour)
         embed.set_author(name=f"{member.display_name}", icon_url=f"{avatar_url}")
@@ -102,6 +106,9 @@ class Utility(commands.Cog):
         embed.add_field(name="is on mobile", value=f"{is_on_mobile}", inline=True)
         embed.add_field(name="timed out until", value=f"{timed_out_until}", inline=True)
         embed.add_field(name="permissions", value=f"{permission}", inline=True)
+        
+        if banner:
+            embed.set_image(url=f"{banner}")
 
         print("Sending embed...")
         await interaction.response.send_message(embed=embed)
