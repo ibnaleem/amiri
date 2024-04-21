@@ -113,5 +113,22 @@ class Utility(commands.Cog):
         print("Sending embed...")
         await interaction.response.send_message(embed=embed)
 
+    @app_commands.command(name="avatar", description="displays the avatar of a member")
+    @app_commands.describe(member="the member to display the avatar for")
+    async def avatar(self, interaction: Interaction, member: Optional[discord.Member]=None):
+        if not member:
+            member = interaction.user
+        
+        if not member.avatar is None:
+            embed = Embed(color=member.colour)
+            embed.set_author(name=f"{member.display_name}", icon_url=f"{member.avatar}")
+            embed.set_image(url=f"{member.avatar}")
+        else:
+            embed = Embed(color=member.colour)
+            embed.set_author(name=f"{member.display_name}", icon_url=f"{member.default_avatar}")
+            embed.set_image(url=f"{member.default_avatar}")
+            
+        await interaction.response.send_message(embed=embed)
+
 async def setup(client: commands.Bot) -> None:
     await client.add_cog(Utility(client))
