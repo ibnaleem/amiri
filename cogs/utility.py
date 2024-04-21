@@ -245,6 +245,33 @@ class Utility(commands.Cog):
         await interaction.followup.send(embed=embed)
         print("Sucessfully sent followup webhook")
 
+    @app_commands.command(name="banner", description="displays the banner of a member or guild")
+    @app_commands.describe(member="the member to display the banner of", guild_id="the guild's id to display the banner of")
+    async def banner(self, interaction: Interaction, member: Optional[discord.Member]=None, guild_id: Optional[str] = None):
+        
+        if guild_id:
+            try:
+                guild = self.client.get_guild(int(guild_id))
+                if guild is None:
+                    embed = Embed(description=f"> could not find guild with id `{guild_id}`", color=0x0C0C0D)
+                    await interaction.response.send_message(embed=embed)
+                else:
+                    embed=Embed(color=0x0C0C0D)
+                    embed.set_image(url=guild.banner if guild.banner else "https://previews.123rf.com/images/imagecatalogue/imagecatalogue1611/imagecatalogue161114296/65897500-not-available-text-rubber-seal-stamp-watermark-caption-inside-rounded-rectangular-banner-with-grunge.jpg")
+                    embed.set_author(name=f"{guild.name}", icon_url=guild.icon)
+                    await interaction.response.send_message(embed=embed)
+            except ValueError:
+                embed = Embed(description=f"> `{guild_id}` is not a valid guild id", color=0x0C0C0D)
+                await interaction.response.send_message(embed=embed)
+
+        if not member:
+            member = interaction.user
+
+        embed = Embed(color=member.colour)
+        embed.set_author(name=f"{member.display_name}", icon_url=f"{member.avatar}")
+        embed.set_image(url=member.banner if member.banner else "https://previews.123rf.com/images/imagecatalogue/imagecatalogue1611/imagecatalogue161114296/65897500-not-available-text-rubber-seal-stamp-watermark-caption-inside-rounded-rectangular-banner-with-grunge.jpg")
+
+        await interaction.response.send_message(embed=embed)
 
 async def setup(client: commands.Bot) -> None:
     await client.add_cog(Utility(client))
