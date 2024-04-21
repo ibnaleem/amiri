@@ -8,6 +8,7 @@ class Utility(commands.Cog):
     def __init__(self, client: commands.Bot) -> None:
         super().__init__()
         self.client = client
+        self.members = 0
 
     def format_dt(self, dt: datetime.datetime) -> str:
         days = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday']
@@ -248,7 +249,7 @@ class Utility(commands.Cog):
     @app_commands.command(name="banner", description="displays the banner of a member or guild")
     @app_commands.describe(member="the member to display the banner of", guild_id="the guild's id to display the banner of")
     async def banner(self, interaction: Interaction, member: Optional[discord.Member]=None, guild_id: Optional[str] = None):
-        
+
         if guild_id:
             try:
                 guild = self.client.get_guild(int(guild_id))
@@ -272,6 +273,36 @@ class Utility(commands.Cog):
         embed.set_image(url=member.banner if member.banner else "https://previews.123rf.com/images/imagecatalogue/imagecatalogue1611/imagecatalogue161114296/65897500-not-available-text-rubber-seal-stamp-watermark-caption-inside-rounded-rectangular-banner-with-grunge.jpg")
 
         await interaction.response.send_message(embed=embed)
+
+    @app_commands.command(name="info", description="displays info about me")
+    async def info(self, interaction: Interaction):
+
+        await interaction.response.defer()
+
+        fmt = await self.client.tree.sync()
+        ic(fmt)
+
+        for guild in self.client.guilds:
+            for member in guild.members:
+                if member.bot:
+                    continue
+                else:
+                    self.members += 1
+
+        embed = Embed(description="> *a multipurpose discord bot written in [discord.py](https://discordpy.readthedocs.io)*", color=0x0C0C0D)
+        embed.set_author(name=self.client.user.display_name, icon_url=self.client.user.avatar)
+        embed.set_footer(text=f"requested by {interaction.user}", icon_url=interaction.user.avatar)
+        embed.set_thumbnail(url=self.client.user.avatar)
+        embed.add_field(name="created by", value="<@1110526906106904626>", inline=True)
+        embed.add_field(name="source code", value="[github](https://github.com/ibnaleem/amiri-py)", inline=True)
+        embed.add_field(name="id", value=self.client.user.id, inline=True)
+        embed.add_field(name="guilds", value=len(self.client.guilds), inline=True)
+        embed.add_field(name="commands", value=len(fmt), inline=True)
+        embed.add_field(name="members", value=self.members)
+        embed.add_field(name="cached messages", value=len(self.client.cached_messages), inline=True)
+        embed.add_field(name="latency", value=f"{self.client.latency} ms", inline=True)
+
+        await interaction.followup.send(embed=embed)
 
 async def setup(client: commands.Bot) -> None:
     await client.add_cog(Utility(client))
