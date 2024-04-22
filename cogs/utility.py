@@ -358,5 +358,27 @@ class Utility(commands.Cog):
 
         await interaction.response.send_message(embed=embed)
 
+    @app_commands.command(name="bionify", description="convert message to bionic text")
+    @app_commands.describe(message="the message to convert")
+    async def bionify(self, interaction: Interaction, message: str):
+
+        if message.startswith("discord.gg/"):
+            embed = Embed(description=f"> ❌ `message` cannot be a url", color=0x0C0C0D)
+            await interaction.response.send_message(embed=embed)
+        try:
+            UrlCheck(url=message)
+            embed = Embed(description=f"> ❌ `message` cannot be a url", color=0x0C0C0D)
+            await interaction.response.send_message(embed=embed)
+        except ValidationError:
+
+            words = message.split()
+            _string = ""
+
+            for word in words:
+                letter_count = len(word)
+                freq = letter_count // 2
+                _string += "".join(f"**{word[:freq]}**{word[freq:]} ")
+
+            await interaction.response.send_message(_string)
 async def setup(client: commands.Bot) -> None:
     await client.add_cog(Utility(client))
