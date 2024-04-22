@@ -6,8 +6,8 @@
 </div>
 
 ## AI Models
-- Llama3 as its text-based model
-- LLaVa as its image processing model
+- [Llama3](https://llama.meta.com/llama3/) as its text-based model
+- [LLaVa](https://llava-vl.github.io) as its image processing model
 
 ## Command Categories
 - [Utility](https://github.com/ibnaleem/amiri/blob/main/cogs/utility.py)
