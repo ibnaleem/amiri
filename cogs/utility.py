@@ -1,8 +1,13 @@
 from icecream import ic
+from pydantic import BaseModel, AnyUrl, ValidationError
 from typing import Optional
 from discord.ext import commands
 import asyncio, discord, datetime, random
 from discord import app_commands, Embed, Interaction
+
+
+class UrlCheck(BaseModel):
+    url: AnyUrl
 
 class Utility(commands.Cog):
     def __init__(self, client: commands.Bot) -> None:
@@ -310,6 +315,19 @@ class Utility(commands.Cog):
         except ValueError:
             embed = Embed(description=f"> `{n}` is not an integer", color=0x0C0C0D)
             await interaction.response.send_message(embed=embed)
+
+    @app_commands.command(name="say", description="repeats what you say")
+    @app_commands.describe(message="the message to repeat")
+    async def say(self, interaction: Interaction, message: str):
+
+        if message.startswith("discord.gg/"):
+            await interaction.response.send_message("`message` cannot be a url")
+        try:
+            UrlCheck(url=message)
+            await interaction.response.send_message("`message` cannot be a url")
+        except ValidationError:
+            await interaction.response.send_message(message)
+
 
 async def setup(client: commands.Bot) -> None:
     await client.add_cog(Utility(client))
