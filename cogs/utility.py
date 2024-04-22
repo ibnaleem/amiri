@@ -1,7 +1,7 @@
 from icecream import ic
 from typing import Optional
 from discord.ext import commands
-import asyncio, discord, datetime
+import asyncio, discord, datetime, random
 from discord import app_commands, Embed, Interaction
 
 class Utility(commands.Cog):
@@ -295,6 +295,21 @@ class Utility(commands.Cog):
         embed.add_field(name="latency", value=f"{self.client.latency} ms", inline=True)
 
         await interaction.followup.send(embed=embed)
+
+    @app_commands.command(name="roll", description="rolls a random number between 1-n")
+    @app_commands.describe(n="the max number to roll (default: 100)")
+    async def roll(self, interaction: Interaction, n: Optional[str]=None):
+        if n is None:
+            n = 100
+        try:
+            n = int(n)
+            roll = random.randint(1,n)
+            embed=Embed(description=f"> you rolled a **{roll}**!", color=0x0C0C0D)
+            embed.set_author(name=f"/roll", icon_url=interaction.user.avatar)
+            await interaction.response.send_message(embed=embed)
+        except ValueError:
+            embed = Embed(description=f"> `{n}` is not an integer", color=0x0C0C0D)
+            await interaction.response.send_message(embed=embed)
 
 async def setup(client: commands.Bot) -> None:
     await client.add_cog(Utility(client))
