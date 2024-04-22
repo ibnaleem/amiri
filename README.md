@@ -4,3 +4,10 @@
     a multipurpose, privacy-focused Discord bot with Llama3 & LLaVa large language models
   </h3>
 </div>
+
+## AI Models
+- Llama3 as its text-based model
+- LLaVa as its image processing model
+
+## Command Categories
+- [Utility](https://github.com/ibnaleem/amiri/blob/main/cogs/utility.py)
