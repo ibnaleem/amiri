@@ -1,9 +1,10 @@
+import os, requests
 from icecream import ic
-from pydantic import BaseModel, AnyUrl, ValidationError
 from typing import Optional
 from discord.ext import commands
 import asyncio, discord, datetime, random
 from discord import app_commands, Embed, Interaction
+from pydantic import BaseModel, AnyUrl, ValidationError
 
 
 class UrlCheck(BaseModel):
@@ -327,6 +328,23 @@ class Utility(commands.Cog):
             await interaction.response.send_message("`message` cannot be a url")
         except ValidationError:
             await interaction.response.send_message(message)
+
+    @app_commands.command(name="qr-code", description="generate a qr code from given text")
+    @app_commands.describe(content="the text or url to generate a qr code from")
+    async def qr_code(self, interaction: Interaction, content: str):
+
+        # await interaction.response.defer()
+
+        url = f"https://api.qrserver.com/v1/create-qr-code/?size=500x500&data={content}"
+
+        response = requests.get(url)
+
+        with open(f"./cogs/qr-{interaction.user.id}.png", "wb") as f:
+            f.write(response.content)
+
+        qr_file = discord.File(f"./cogs/qr-{interaction.user.id}.png")
+        await interaction.response.send_message(file=qr_file)
+        os.remove(f"./cogs/qr-{interaction.user.id}.png")
 
 
 async def setup(client: commands.Bot) -> None:
