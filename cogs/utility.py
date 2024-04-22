@@ -2,7 +2,7 @@ import os, requests
 from icecream import ic
 from typing import Optional
 from discord.ext import commands
-import asyncio, discord, datetime, random
+import discord, datetime, random
 from discord import app_commands, Embed, Interaction
 from pydantic import BaseModel, AnyUrl, ValidationError
 
@@ -322,10 +322,12 @@ class Utility(commands.Cog):
     async def say(self, interaction: Interaction, message: str):
 
         if message.startswith("discord.gg/"):
-            await interaction.response.send_message("`message` cannot be a url")
+            embed = Embed(description=f"> ❌ `message` cannot be a url", color=0x0C0C0D)
+            await interaction.response.send_message(embed=embed)
         try:
             UrlCheck(url=message)
-            await interaction.response.send_message("`message` cannot be a url")
+            embed = Embed(description=f"> ❌ `message` cannot be a url", color=0x0C0C0D)
+            await interaction.response.send_message(embed=embed)
         except ValidationError:
             await interaction.response.send_message(message)
 
@@ -346,6 +348,15 @@ class Utility(commands.Cog):
         await interaction.response.send_message(file=qr_file)
         os.remove(f"./cogs/qr-{interaction.user.id}.png")
 
+    @app_commands.command(name="kanye-quotes", description="displays a random kanye west quote")
+    async def kenye_quotes(self, interaction: Interaction):
+
+        response = requests.get("https://api.kanye.rest")
+
+        embed = Embed(description=f"> *{response.json()["quote"]}*", color=0x0C0C0D)
+        embed.set_author(name="@ye ✅", icon_url="https://scontent.cdninstagram.com/v/t51.2885-19/434212848_1542256839950920_1422056852127718626_n.jpg?_nc_ht=scontent.cdninstagram.com&_nc_cat=1&_nc_ohc=InHw5he8wt8Ab4rTkOK&edm=APs17CUBAAAA&ccb=7-5&oh=00_AfDtpIuunFyWP72Nh2po8yoXoyka934zU5T2l_1WHYrPIQ&oe=662C8FDC&_nc_sid=10d13b")
+
+        await interaction.response.send_message(embed=embed)
 
 async def setup(client: commands.Bot) -> None:
     await client.add_cog(Utility(client))
