@@ -1,13 +1,25 @@
+# [amiri](https://discord.com/oauth2/authorize?client_id=1224418740322701332&permissions=633318697467895&scope=bot)
+multipurpose, privacy-focused discord bot with llama3 and llava language models.
+## Invite
 <div align="center">
-  <img width=50% height=50% src=https://images.fineartamerica.com/images/artworkimages/mediumlarge/3/amiri-black-eileen-dasher.jpg>
-  <h3>
-    a multipurpose, privacy-focused Discord bot with Llama3 & LLaVa large language models
-  </h3>
+  <img src="https://media.discordapp.net/attachments/1202231168536154112/1231963429846122640/qr-1110526906106904626.png?ex=6638de5a&is=6626695a&hm=3d0bc7214e3f662d2e59d28f8ae93f6a5a8e5be495260d0ed734b5cf840d2a57&=&format=webp&quality=lossless&width=250&height=250">
+    <h6><i>this qr code was generated with <a href="https://discord.com/oauth2/authorize?client_id=1224418740322701332&permissions=633318697467895&scope=bot">amiri</a></i></h6>
 </div>
+
+```
+https://discord.com/oauth2/authorize?client_id=1224418740322701332&permissions=633318697467895&scope=bot
+```
 
 ## AI Models
 - [Llama3](https://llama.meta.com/llama3/) as its text-based model
 - [LLaVa](https://llava-vl.github.io) as its image processing model
 
-## Command Categories
-- [Utility](https://github.com/ibnaleem/amiri/blob/main/cogs/utility.py)
+## Categories
+- [Message Cog](https://github.com/ibnaleem/amiri/blob/main/cogs/message.py)
+- [Utility Commands](https://github.com/ibnaleem/amiri/blob/main/cogs/utility.py)
+
+## Created with
+- [Discord.py](https://github.com/Rapptz/discord.py)
+
+## LICENSE
+This repository is under the [MIT License](https://github.com/ibnaleem/amiri/blob/main/LICENSE)
