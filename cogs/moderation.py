@@ -10,7 +10,7 @@ class Moderation(commands.Cog):
 
     @app_commands.command(name="nuke", description="delete all messages in the channel")
     @app_commands.describe(channel="the channel to nuke")
-    @app_commands.check(app_commands.has_permissions(manage_channels=True))
+    @app_commands.default_member_permissions(manage_channels=True)
     async def nuke(self, interaction: Interaction, channel: Optional[discord.TextChannel]=None, reason: Optional[str]=None):
 
         if not channel:
