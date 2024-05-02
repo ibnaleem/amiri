@@ -30,10 +30,16 @@ jobs:
         if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
         pip install ollama
 
-    - name: Pull Models
+    - name: Find ollama executable path
+      id: find_ollama
       run: |
-        ollama pull llama3
-        ollama pull llava
+        echo "::set-output name=ollama_path::$(find / -name 'ollama' 2>/dev/null | head -n 1)"
+
+    - name: Run ollama command
+      run: | 
+        ${{ steps.find_ollama.outputs.ollama_path }} pull llama3
+        ${{ steps.find_ollama.outputs.ollama_path }} pull llava
+      
 
     - name: Run Discord Bot
       run: python main.py
