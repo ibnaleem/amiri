@@ -23,7 +23,7 @@ class Moderation(commands.Cog):
         await channel.delete(reason=reason)
 
         embed = Embed(description=f"> ✅ nuked {cloned_channel.mention} | *{reason}*", color=0x0C0C0D)
-        await cloned_channel.send(embed=embed)
+        await cloned_channel.send(interaction.user.mention, embed=embed)
 
 
 async def setup(client: commands.Bot) -> None:
