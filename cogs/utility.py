@@ -1,11 +1,10 @@
-import os, requests
 from icecream import ic
+import os, requests, random
 from typing import Optional
 from discord.ext import commands
 import discord, datetime, random
 from discord import app_commands, Embed, Interaction
 from pydantic import BaseModel, AnyUrl, ValidationError
-
 
 class UrlCheck(BaseModel):
     url: AnyUrl
@@ -299,6 +298,8 @@ class Utility(commands.Cog):
         embed.add_field(name="members", value=len(self.client.users))
         embed.add_field(name="cached messages", value=len(self.client.cached_messages), inline=True)
         embed.add_field(name="latency", value=f"{self.client.latency} ms", inline=True)
+        embed.add_field(name="text model", value="[Llama3](https://ai.meta.com/blog/meta-llama-3/)")
+        embed.add_field(name="image model", value="[LLaVA](https://llava-vl.github.io)")
 
         await interaction.followup.send(embed=embed)
 
@@ -354,7 +355,7 @@ class Utility(commands.Cog):
         response = requests.get("https://api.kanye.rest")
 
         embed = Embed(description=f"> *{response.json()["quote"]}*", color=0x0C0C0D)
-        embed.set_author(name="@ye ✅", icon_url="https://scontent.cdninstagram.com/v/t51.2885-19/434212848_1542256839950920_1422056852127718626_n.jpg?_nc_ht=scontent.cdninstagram.com&_nc_cat=1&_nc_ohc=InHw5he8wt8Ab4rTkOK&edm=APs17CUBAAAA&ccb=7-5&oh=00_AfDtpIuunFyWP72Nh2po8yoXoyka934zU5T2l_1WHYrPIQ&oe=662C8FDC&_nc_sid=10d13b")
+        embed.set_author(name="@ye ✅", icon_url="https://hips.hearstapps.com/hmg-prod/images/kanye-west-attends-the-christian-dior-show-as-part-of-the-paris-fashion-week-womenswear-fall-winter-2015-2016-on-march-6-2015-in-paris-france-photo-by-dominique-charriau-wireimage-square.jpg")
 
         await interaction.response.send_message(embed=embed)
 
