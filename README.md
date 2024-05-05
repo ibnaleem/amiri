@@ -15,7 +15,9 @@ https://discord.com/oauth2/authorize?client_id=1224418740322701332&permissions=6
 - [LLaVa](https://llava-vl.github.io) as its image processing model
 
 ## Categories
+- [Hash Commands](https://github.com/ibnaleem/amiri/blob/main/cogs/hash.py)
 - [Message Cog](https://github.com/ibnaleem/amiri/blob/main/cogs/message.py)
+- [Moderation Commands](https://github.com/ibnaleem/amiri/blob/main/cogs/moderation.py)
 - [Utility Commands](https://github.com/ibnaleem/amiri/blob/main/cogs/utility.py)
 
 ## LICENSE
