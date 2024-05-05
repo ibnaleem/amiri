@@ -2,6 +2,7 @@ import asyncio, discord, os
 from discord import Intents
 from discord.ext import commands
 
+
 AMIRI_TOKEN = os.environ["AMIRI_TOKEN"]
 
 intents = Intents.all()
