@@ -30,51 +30,55 @@ class Hash(commands.Cog):
             data_2 = await file.read()
         elif text and not file:
             data = text.encode("utf-8")
+            data_2 = None
+            hash_result2 = None
         elif file and not text:
             data = await file.read()
+            data_2 = None
+            hash_result2 = None
         else:
             embed = Embed(description="> ❌  **provide either text or a file to hash**", color=0x0C0C0D)
             await interaction.response.send_message(embed=embed)
             return
 
         if function.name == "md5":
-            if not data_2:  
+            if data_2 is None:  
                 hash_result = hashlib.md5(data).hexdigest()
             else:
                 hash_result = hashlib.md5(data).hexdigest()
                 hash_result2 = hashlib.md5(data_2).hexdigest() 
         elif function.name == "sha1":
-            if not data_2:
+            if data_2 is None:
                 hash_result = hashlib.sha1(data).hexdigest()
             else:
                 hash_result = hashlib.sha1(data).hexdigest()
                 hash_result2 = hashlib.sha1(data_2).hexdigest()
         elif function.name == "sha3":
-            if not data_2:
+            if data_2 is None:
                 hash_result = hashlib.sha3_256(data).hexdigest()
             else:
                 hash_result = hashlib.sha3_256(data).hexdigest()
                 hash_result2 = hashlib.sha3_256(data_2).hexdigest()
         elif function.name == "sha256":
-            if not data_2:
+            if data_2 is None:
                 hash_result = hashlib.sha256(data).hexdigest()
             else:
                 hash_result = hashlib.sha256(data).hexdigest()
                 hash_result2 = hashlib.sha256(data_2).hexdigest()
         elif function.name == "sha384":
-            if not data_2:
+            if data_2 is None:
                 hash_result = hashlib.sha384(data).hexdigest()
             else:
                 hash_result = hashlib.sha384(data).hexdigest()
                 hash_result2 = hashlib.sha384(data_2).hexdigest()
         elif function.name == "sha512":
-            if not data_2:
+            if data_2 is None:
                 hash_result = hashlib.sha512(data).hexdigest()
             else:
                 hash_result = hashlib.sha512(data).hexdigest()
                 hash_result2 = hashlib.sha512(data_2).hexdigest()
 
-        if not hash_result2:
+        if hash_result2 is None:
             await interaction.response.send_message(hash_result)
         else:
             await interaction.response.send_message(f"**text hash:** ```{hash_result}```\n**{file.filename} hash:** ```{hash_result2}```")
@@ -91,7 +95,7 @@ class Hash(commands.Cog):
             Choice(name="sha512", value=6),
         ]
     )
-    
+
     async def checksum(self, interaction: Interaction, function: Choice[int], file: Attachment, checksum: str):
 
         data = await file.read()
@@ -110,8 +114,8 @@ class Hash(commands.Cog):
             hash_result = hashlib.sha512(data).hexdigest()
 
         if hash_result == checksum:
-                embed = Embed(description="> ✅  **the checksum matches the hash of the file**", color=0x0C0C0D)
-                await interaction.response.send_message(embed=embed)
+            embed = Embed(description="> ✅  **the checksum matches the hash of the file**", color=0x0C0C0D)
+            await interaction.response.send_message(embed=embed)
         else:
             embed = Embed(description="> ❌  **the checksum does not match the hash of the file**", color=0x0C0C0D)
             embed.add_field(name="actual file checksum", value=f"`{hash_result}`")
