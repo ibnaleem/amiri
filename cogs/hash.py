@@ -74,12 +74,49 @@ class Hash(commands.Cog):
                 hash_result = hashlib.sha512(data).hexdigest()
                 hash_result2 = hashlib.sha512(data_2).hexdigest()
 
-        
         if not hash_result2:
             await interaction.response.send_message(hash_result)
         else:
             await interaction.response.send_message(f"**text hash:** ```{hash_result}```\n**{file.filename} hash:** ```{hash_result2}```")
 
+    @app_commands.command(name="checksum", description="Determine if a given checksum matches the hash of a file")
+    @app_commands.describe(function="hash function", file="the file you want to check", checksum="the checksum you want to check")
+    @app_commands.choices(
+        function=[
+            Choice(name="md5", value=1),
+            Choice(name="sha1", value=2),
+            Choice(name="sha3", value=3),
+            Choice(name="sha256", value=4),
+            Choice(name="sha384", value=5),
+            Choice(name="sha512", value=6),
+        ]
+    )
+    
+    async def checksum(self, interaction: Interaction, function: Choice[int], file: Attachment, checksum: str):
+
+        data = await file.read()
+
+        if function.name == "md5":
+            hash_result = hashlib.md5(data).hexdigest()
+        elif function.name == "sha1":
+            hash_result = hashlib.sha1(data).hexdigest()
+        elif function.name == "sha3":
+            hash_result = hashlib.sha3_256(data).hexdigest()
+        elif function.name == "sha256":
+            hash_result = hashlib.sha256(data).hexdigest()
+        elif function.name == "sha384":
+            hash_result = hashlib.sha384(data).hexdigest()
+        elif function.name == "sha512":
+            hash_result = hashlib.sha512(data).hexdigest()
+
+        if hash_result == checksum:
+                embed = Embed(description="> ✅  **the checksum matches the hash of the file**", color=0x0C0C0D)
+                await interaction.response.send_message(embed=embed)
+        else:
+            embed = Embed(description="> ❌  **the checksum does not match the hash of the file**", color=0x0C0C0D)
+            embed.add_field(name="actual file checksum", value=f"`{hash_result}`")
+            embed.add_field(name="incorrect file checksum", value=f"`{checksum}`")
+            await interaction.response.send_message(embed=embed)
 
 async def setup(client: commands.Bot) -> None:
     await client.add_cog(Hash(client))
