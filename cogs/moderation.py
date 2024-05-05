@@ -30,6 +30,8 @@ class Moderation(commands.Cog):
     @app_commands.default_permissions(manage_messages=True)
     async def purge(self, interaction: Interaction, amount: Optional[int]=None, channel: Optional[discord.TextChannel]=None, reason: Optional[str]=None, member: Optional[discord.Member]=None, bots: Optional[bool]=None):
 
+        await interaction.response.defer()
+
         if not amount:
             amount = 10
 
@@ -41,22 +43,22 @@ class Moderation(commands.Cog):
 
         if member and bots:
             embed = Embed(description=f"> ❌ you can't delete messages from both a member and bots", color=0x0C0C0D)
-            await interaction.response.send(embed=embed)
+            await interaction.followup.send(embed=embed)
 
         elif member:
             embed = Embed(description=f"> ✅ purged {amount} messages from {member.mention} in {channel.mention}| *{reason}*", color=0x0C0C0D)
             await channel.purge(limit=amount, check=lambda m: m.author == member, reason=reason)
-            await interaction.response.send(embed=embed)
+            await interaction.followup.send(embed=embed)
 
         elif bots:
             embed = Embed(description=f"> ✅ purged {amount} messages from bots in {channel.mention} | *{reason}*", color=0x0C0C0D)
             await channel.purge(limit=amount, check=lambda m: m.author.bot, reason=reason)
-            await interaction.response.send(embed=embed)
+            await interaction.followup.send(embed=embed)
 
         else:
             await channel.purge(limit=amount, reason=reason)
             embed = Embed(description=f"> ✅ purged {amount} messages in {channel.mention} | *{reason}*", color=0x0C0C0D)
-
+            await interaction.followup.send(embed=embed)
 
 async def setup(client: commands.Bot) -> None:
     await client.add_cog(Moderation(client))
