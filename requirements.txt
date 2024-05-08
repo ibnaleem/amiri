@@ -1,5 +1,6 @@
-discord.py
-icecream
+gnupg
 ollama
 pydantic
+icecream
 requests
+discord.py
