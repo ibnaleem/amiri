@@ -60,5 +60,15 @@ class Moderation(commands.Cog):
             embed = Embed(description=f"> ✅ purged {amount} messages in {channel.mention} | *{reason}*", color=0x0C0C0D)
             await interaction.followup.send(embed=embed)
 
+    @app_commands.command(name="kick", description="kick a member")
+    @app_commands.describe(member="the member to kick", reason="the reason for the kick")
+    async def kick(self, interaction: Interaction, member: discord.Member, reason: Optional[str]=None):
+        if not reason:
+            reason = f"no reason provided, member was kicked by {interaction.user}"
+
+        embed = Embed(description=f"> ✅ kicked {member.mention} | *{reason}*", color=0x0C0C0D)
+        await member.kick(reason=reason)
+        await interaction.response.send_message(embed=embed)
+
 async def setup(client: commands.Bot) -> None:
     await client.add_cog(Moderation(client))
